@@ -5,6 +5,7 @@ Learn:
 * Hooks
 * Unit Test in React
 * Redux
+* React Router
 * Ui component Library (Material Ui)
 * Styled Components
 * Style Guide/Best practices for React
