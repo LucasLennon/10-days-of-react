@@ -1,3 +1,16 @@
+# 10-days-of-react
+I will try 10 days of using and learning react.
+
+Learn:
+* Hooks
+* Unit Test in React
+* Redux
+* Ui component Library (Material Ui)
+* Styled Components
+* Style Guide/Best practices for React
+
+The Project: Classical Login form with All this to-learn skills applied on the best that I can in 10 days.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
