@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
+import React, { 
+  // useEffect, 
+  useState, 
+  Fragment 
+} from 'react';
 import Login from "../page/Login";
+import Sidebar from "./BaseSidebar";
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  // Link
 } from "react-router-dom";
 
-import { makeStyles } from '@material-ui/core/styles';
 import { 
   AppBar,
   Toolbar,
-  // IconButton,
   Typography,
-  Container, 
   Box,
-  // Button
+  IconButton
 } from "@material-ui/core"
-// import MenuIcon from '@material-ui/icons/Menu';
+import { makeStyles } from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,27 +34,50 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function MainLayout() {
 
-function App() {
+  // const {  } = useRouteMatch();
   const classes = useStyles();
+  const [sidebar, setSidebar] = useState(false);
+  const [pageName, setPageName] = useState("Login");
+
   return (
-    <Box>
-      
-      <Router>
+    <Router>
+      <Box>
+        <Sidebar open={sidebar} onClose={() => setSidebar(!sidebar)}/>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => setSidebar(!sidebar)}>
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              {pageName}
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <Switch>
-          <Route path="/">
-            <Login></Login>
-          </Route>
-          <Route path="/register">
-              Being created!
-          </Route>
+          <Route exact path="/" render={
+            () => {
+              setPageName("Login")
+              return(
+                <Login />
+              )
+            }
+          } />
+          <Route path="/register" render={
+            () => {
+              setPageName("Register")
+              return (
+                <Fragment>
+                  Being created!
+                </Fragment>
+              )
+            }
+          } />
         </Switch>
-      </Router>
-
-    
-    </Box>
-
-  );
+      </Box>
+    </Router>
+  )
 }
 
-export default App;
+export default MainLayout;

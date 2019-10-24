@@ -1,65 +1,68 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useState } from 'react';
 
-// import styled from "styled-components"
-import { makeStyles } from '@material-ui/core/styles';
 import { 
-  AppBar,
-  Toolbar,
-  // IconButton,
-  Typography,
+  Grid,
+  FormGroup,
   Container, 
   Box,
-  // Button
-  FormControl,
   InputLabel,
   Input,
   FormHelperText,
 } from "@material-ui/core"
-// import MenuIcon from '@material-ui/icons/Menu';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import styled from "styled-components"
 
+const Card = styled(Grid)`
+  background: #fff;
+  box-shadow: 0px 0px 5px 5px rgba(0,0,0,.3); 
+  border-radius: .5rem; 
+`;
 
 function Login() {
-  const classes = useStyles();
-  const [form, setForm] = useState({
-    login: null,
-    password: null,
-  });
+  const [login, setLogin] = useState(null);
+  const [password, setPassword] = useState(null);
 
-  useEffect(() => {
+  function sendForm(event) {
+    event.preventDefault();
+    const form = {
+      login,
+      password
+    }
     console.log(form);
-  });
+  }
 
   return (
-    <Fragment>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Login
-            </Typography>
-        </Toolbar>
-      </AppBar>
-      <Container>
-        <Box p={2}>
-          <FormControl>
-            <InputLabel htmlFor="my-input">Email address</InputLabel>
-            <Input onChange={(e) => setForm({login: e.target.value})} aria-describedby="my-helper-text" />
-            {/* <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText> */}
-          </FormControl>
+    <Container>
+      <Grid container justify="center">
+
+        <Box mt={3}>
+          {/* <Card item xs={10} s={8} l={6} xl={4}> */}
+          <Card item>
+            <Box p={3}>
+              <form onSubmit={sendForm}>
+                <Grid container>
+                  <FormGroup>
+                    <FormGroup>
+                      <InputLabel htmlFor="my-input">Login</InputLabel>
+                      <Input onChange={(e) => setLogin(e.target.value)} aria-describedby="my-helper-text" />
+                    </FormGroup>
+                    <FormGroup>
+                      <InputLabel htmlFor="my-input">Password</InputLabel>
+                      <Input type="password" onChange={(e) => setPassword(e.target.value)} aria-describedby="my-helper-text" />
+                      <FormHelperText id="my-helper-text">Min: 6 letras, 1 maiuscula, 1 minuscula</FormHelperText>
+                    </FormGroup>
+                    <FormGroup>
+                      <Input type="submit" variant="contained" color="primary">Enviar</Input>
+                    </FormGroup>
+                  </FormGroup>
+                </Grid>
+              </form>
+            </Box>
+          </Card>
         </Box>
-      </Container>
-    </Fragment>
+
+      </Grid>
+    </Container>
   );
 }
 
