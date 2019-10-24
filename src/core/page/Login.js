@@ -35,31 +35,41 @@ function Login() {
     <Container>
       <Grid container justify="center">
 
-        <Box mt={3}>
-          {/* <Card item xs={10} s={8} l={6} xl={4}> */}
-          <Card item>
-            <Box p={3}>
-              <form onSubmit={sendForm}>
-                <Grid container>
-                  <FormGroup>
-                    <FormGroup>
-                      <InputLabel htmlFor="my-input">Login</InputLabel>
-                      <Input onChange={(e) => setLogin(e.target.value)} aria-describedby="my-helper-text" />
-                    </FormGroup>
-                    <FormGroup>
-                      <InputLabel htmlFor="my-input">Password</InputLabel>
-                      <Input type="password" onChange={(e) => setPassword(e.target.value)} aria-describedby="my-helper-text" />
-                      <FormHelperText id="my-helper-text">Min: 6 letras, 1 maiuscula, 1 minuscula</FormHelperText>
-                    </FormGroup>
-                    <FormGroup>
-                      <Input type="submit" variant="contained" color="primary">Enviar</Input>
-                    </FormGroup>
-                  </FormGroup>
-                </Grid>
-              </form>
-            </Box>
-          </Card>
-        </Box>
+        <Grid item xs={10} sm={8} md={6}>
+          <Box mt={3}>
+            <Card item>
+              <Box p={3}>
+                <form onSubmit={sendForm}>
+                  <Grid container justify="center">
+                    <Box display="block" width={1}>
+                      <Box mb={3}>
+                        <FormGroup>
+                          <InputLabel htmlFor="my-input">Login</InputLabel>
+                          <Input onChange={(e) => setLogin(e.target.value)} aria-describedby="my-helper-text"/>
+                        </FormGroup>
+                      </Box>
+                      <Box mb={3}>
+                        <FormGroup>
+                          <InputLabel htmlFor="my-input">Password</InputLabel>
+                          <Input type="password" onChange={(e) => setPassword(e.target.value)} aria-describedby="my-helper-text"/>
+                          <FormHelperText id="my-helper-text">Min: 6 letras, 1 maiuscula, 1 minuscula</FormHelperText>
+                        </FormGroup>
+                      </Box>
+                      <Box mb={3}>
+                        <Grid container justify="flex-end">
+                          <Box width={1/4}>
+                            <Input fullWidth type="submit" variant="contained" color="primary">Enviar</Input>
+                          </Box>
+                        </Grid>
+                      </Box>
+                    </Box>
+                  </Grid>
+                </form>
+              </Box>
+            </Card>
+          </Box>
+        </Grid>
+
 
       </Grid>
     </Container>
