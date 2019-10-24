@@ -4,24 +4,40 @@ import React, {
     // useEffect 
 } from 'react';
 
-import {
-  Link
-} from "react-router-dom";
+// import {
+//   Link
+// } from "react-router-dom";
+
+import { makeStyles } from '@material-ui/core/styles';
 
 import { 
   Drawer,
+  Link,
   List,
   ListItem,
   // ListItemIcon,
   ListItemText
 } from "@material-ui/core"
 
+const DrawerPaperStyle = makeStyles(theme =>
+  ({
+    root: {
+      backgroundColor: theme.palette.secondary.main,
+    }
+  })
+);
+
 
 function BaseSidebar(props) {
+  const drawerPaperClasses = DrawerPaperStyle();
   const [items] = useState([
     {
-      name: "Login",
+      name: "News",
       path: "/"
+    },
+    {
+      name: "Login",
+      path: "/Login"
     },
     {
       name: "Register",
@@ -29,13 +45,16 @@ function BaseSidebar(props) {
     }
   ])
   return (
-    <Drawer open={props.open} onClose={props.onClose}>
+    <Drawer 
+      PaperProps={{ classes: drawerPaperClasses }}  
+      open={props.open} 
+      onClose={props.onClose}>
       <List>
         {
           items.map((item) => {
             return (
               <ListItem button key={item.name}>
-                <Link to={item.path}>
+                <Link href={item.path}>
                   <ListItemText primary={item.name} />
                 </Link>
               </ListItem>
