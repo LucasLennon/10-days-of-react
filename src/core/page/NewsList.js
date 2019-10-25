@@ -12,7 +12,7 @@ import {
   List,
   ButtonGroup,
   Button,
-  Typography,
+  LinearProgress,
 } from "@material-ui/core"
 
 import NewsPreview from "../component/NewsPreview";
@@ -32,45 +32,58 @@ function NewsList() {
   const [loadingContent, setLoading] = useState(true);
   const [maxItems, setMaxItems] = useState(15)
 
-  const [totalItems, setTotalItems] = useState([])
+  const [storiesIDS, setStoriesIDS] = useState([])
   useEffect(() => {
     setLoading(true);
     async function AllItems() {
       const responseAll = await API.get("newstories.json");
       const slicedItems = responseAll.slice(0, maxItems);
-      setTotalItems(slicedItems)
+      setStoriesIDS(slicedItems)
     }
     AllItems()
     return function cleanup() {
+      setLoadingProgress(0);
       setNewsList([]);
-      setTotalItems([]);
+      setStoriesIDS([]);
     };
   }, [maxItems])
 
   const [newsList, setNewsList] = useState([])
   useEffect(() => {
-    async function getItemsInformation(params) {
+    async function getItemsInformation() {
       let itemsGetted = [];
       await new Promise(resolve => {
 
-        totalItems.forEach(async (value,index) => {
+        storiesIDS.forEach(async (value,index) => {
           const item = await API.get("item/" + value + ".json");
           itemsGetted.push(item)
-          if (totalItems[index] === totalItems[totalItems.length - 1]) {
+          if (storiesIDS[index] === storiesIDS[storiesIDS.length - 1]) {
             resolve()
           }
         })
 
       })
-      // console.log('outside eita', itemsGetted.length);
       setNewsList(itemsGetted)
-      setLoading(false);
+      // setLoading(false);
     }
 
-    if (totalItems.length > 0) {
+    if (storiesIDS.length > 0) {
       getItemsInformation()
     }
-  }, [totalItems])
+  }, [storiesIDS])
+
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  // useEffect(() => {
+  //   if (loadingProgress === 100) {
+  //     setLoading(false);
+  //   }
+  //   else{
+  //     setLoadingProgress(loadingProgress + 1);
+  //   }
+  //   return function cleanup(){
+  //     setLoadingProgress(0)
+  //   }
+  // }, [loadingProgress, newsList])
 
   const ItemList = () => {
     if (loadingContent === false) {
@@ -83,9 +96,11 @@ function NewsList() {
       );
     }
     return (
-      <Typography>
-        Loading
-      </Typography>
+      <Box my={2}>
+        {/* valueBuffer={(maxItems / 100) * 100} */}
+        {/* <LinearProgress variant="buffer" value={loadingProgress} valueBuffer={( loadingProgress / 100 ) * 100}></LinearProgress> */}
+        <LinearProgress variant="determinate" value={loadingProgress}></LinearProgress>
+      </Box>
     );
   };
 
@@ -107,10 +122,7 @@ function NewsList() {
             })}
           </ButtonGroup>
           
-
-          {
-            ItemList()
-          }
+          {ItemList()}
           
         </Box>
       </Grid>
