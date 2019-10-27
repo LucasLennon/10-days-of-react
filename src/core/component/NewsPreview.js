@@ -9,7 +9,7 @@ import {
   Button,
 } from "@material-ui/core"
 
-function NewsCaption(props) {
+function NewsPreview(props) {
 
   function pointsLabel() {
     if (props.info.score > 1) {
@@ -24,23 +24,17 @@ function NewsCaption(props) {
     return 'comment'
   }
 
-  // id
-  // deleted
-  // by
-  // dead
-  // parts
-  // type
-  // time
-  // score
-  // title
-  // descendants
-
   if (!props.info.dead) {
+    console.log(props);
+    
     return (
       <ListItem>
         <Box display="flex" flexWrap="wrap" width={1}>
           <Box display="flex" width={1}>
-            <Link href={`/news/${props.info.id}`} variant="body1">
+            <Link href={
+              (props.info.url) ? props.info.url : `/news/${props.info.id}`
+            } variant="body1">
+              {props.id}.
               {props.info.title}
               <Box display="inline" mx={1}>
                 <Typography variant="caption" mx={1}>
@@ -57,7 +51,7 @@ function NewsCaption(props) {
               <Button onClick={() => props.hideItem(props.info.id)}>
                 hide
               </Button>
-              <Button onClick={() => props.hideItem(props.info.id)}>
+              <Button href={`/news/${props.info.id}`}>
                 {props.info.descendants} {commentsLabel()}
               </Button>
             </ButtonGroup>
@@ -75,4 +69,4 @@ function NewsCaption(props) {
   }
 }
 
-export default NewsCaption;
+export default NewsPreview;

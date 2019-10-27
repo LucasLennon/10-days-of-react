@@ -39,14 +39,14 @@ function NewsList() {
 
   const [storiesIDS, setStoriesIDS] = useState([])
   useEffect(() => {
-    setLoading(true);
     async function AllItems() {
-      const responseAll = await API.get("newstories.json");
+      const responseAll = await API.get("topstories.json");
       const slicedItems = responseAll.slice(0, maxItems);
       setStoriesIDS(slicedItems)
     }
     AllItems()
-    return function cleanup() {
+    return () => {
+      setLoading(true);
       setLoadingProgress(0);
       setNewsList([]);
       setStoriesIDS([]);
@@ -57,20 +57,11 @@ function NewsList() {
   const [newsList, setNewsList] = useState([])
   useEffect(() => {
     async function getItemsInformation() {
-      let itemsGetted = [];
-      await new Promise(resolve => {
-
-        storiesIDS.forEach(async (value,index) => {
-          const item = await API.get("item/" + value + ".json");
-          setLoadingProgress((c) => c + 1);
-          itemsGetted.push(item)
-          if (storiesIDS[index] === storiesIDS[storiesIDS.length - 1]) {
-            resolve()
-          }
-        })
-
+      storiesIDS.forEach(async (value, index) => {
+        const item = await API.get("item/" + value + ".json");
+        setLoadingProgress((c) => c + 1);
+        setNewsList((n) => [...n, item])
       })
-      setNewsList(itemsGetted)
     }
 
     if (storiesIDS.length > 0) {
@@ -89,8 +80,8 @@ function NewsList() {
     if (loadingContent === false) {
       return (
         <List>
-          {newsList.map(item => {
-            return <NewsPreview info={item} key={item.id} />;
+          {newsList.map((item, key) => {
+            return <NewsPreview info={item} id={key + 1} key={key + 1} />;
           })}
         </List>
       );
