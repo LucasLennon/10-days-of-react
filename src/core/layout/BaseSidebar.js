@@ -39,10 +39,10 @@ function BaseSidebar(props) {
       name: "Login",
       path: "/Login"
     },
-    {
-      name: "Register",
-      path: "/register"
-    }
+    // {
+    //   name: "Register",
+    //   path: "/register"
+    // }
   ])
   return (
     <Drawer 

@@ -14,6 +14,7 @@ import {
   Button,
 } from "@material-ui/core"
 
+import NewsLayout from "../layout/NewsLayout";
 import NewsPreview from "../component/NewsPreview";
 import LoadingProgress from "../component/LoadingProgress";
 
@@ -92,13 +93,13 @@ function NewsList() {
   };
 
   return (
-    <Container>
-      <Grid container justify="flex-start">
-        <Box className={newsBoxClasses.boxListStyle} p={2} width={1}>
-
-          <ButtonGroup variant="contained" size="small">
-            {
-              [15, 30, 45].map((value, id) => {
+    <NewsLayout pageName="News">
+      
+      <Container>
+        <Grid container justify="flex-start">
+          <Box className={newsBoxClasses.boxListStyle} p={2} width={1}>
+            <ButtonGroup variant="contained" size="small">
+              {[15, 30, 45].map((value, id) => {
                 return (
                   <Button
                     color={value === maxItems ? "primary" : "secondary"}
@@ -108,17 +109,14 @@ function NewsList() {
                     {value}
                   </Button>
                 );
-              })
-            }
-          </ButtonGroup>
-          
-          {
-            ListToggle()
-          }
-          
-        </Box>
-      </Grid>
-    </Container>
+              })}
+            </ButtonGroup>
+
+            {ListToggle()}
+          </Box>
+        </Grid>
+      </Container>
+    </NewsLayout>
   );
 }
 

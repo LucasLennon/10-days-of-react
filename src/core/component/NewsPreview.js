@@ -25,8 +25,6 @@ function NewsPreview(props) {
   }
 
   if (!props.info.dead) {
-    console.log(props);
-    
     return (
       <ListItem>
         <Box display="flex" flexWrap="wrap" width={1}>
