@@ -12,10 +12,10 @@ import {
   List,
   ButtonGroup,
   Button,
-  LinearProgress,
 } from "@material-ui/core"
 
 import NewsPreview from "../component/NewsPreview";
+import LoadingProgress from "../component/LoadingProgress";
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,6 +26,11 @@ const NewsBoxStyle = makeStyles(theme =>
   }
 })
 );
+
+// Loading math to determinate progress
+function loadingProgressMath(value, itemCount) {
+  return value / itemCount * 100
+}
 
 function NewsList() {
   const newsBoxClasses = NewsBoxStyle();
@@ -48,6 +53,7 @@ function NewsList() {
     };
   }, [maxItems])
 
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [newsList, setNewsList] = useState([])
   useEffect(() => {
     async function getItemsInformation() {
@@ -56,6 +62,7 @@ function NewsList() {
 
         storiesIDS.forEach(async (value,index) => {
           const item = await API.get("item/" + value + ".json");
+          setLoadingProgress((c) => c + 1);
           itemsGetted.push(item)
           if (storiesIDS[index] === storiesIDS[storiesIDS.length - 1]) {
             resolve()
@@ -64,7 +71,6 @@ function NewsList() {
 
       })
       setNewsList(itemsGetted)
-      // setLoading(false);
     }
 
     if (storiesIDS.length > 0) {
@@ -72,20 +78,14 @@ function NewsList() {
     }
   }, [storiesIDS])
 
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  // useEffect(() => {
-  //   if (loadingProgress === 100) {
-  //     setLoading(false);
-  //   }
-  //   else{
-  //     setLoadingProgress(loadingProgress + 1);
-  //   }
-  //   return function cleanup(){
-  //     setLoadingProgress(0)
-  //   }
-  // }, [loadingProgress, newsList])
+  useEffect(() => {
+    if (loadingProgressMath(loadingProgress, maxItems) >= 95) {
+      setLoading(false);
+      setLoadingProgress(0);
+    }
+  }, [loadingProgress, maxItems])
 
-  const ItemList = () => {
+  const ListToggle = () => {
     if (loadingContent === false) {
       return (
         <List>
@@ -96,11 +96,7 @@ function NewsList() {
       );
     }
     return (
-      <Box my={2}>
-        {/* valueBuffer={(maxItems / 100) * 100} */}
-        {/* <LinearProgress variant="buffer" value={loadingProgress} valueBuffer={( loadingProgress / 100 ) * 100}></LinearProgress> */}
-        <LinearProgress variant="determinate" value={loadingProgress}></LinearProgress>
-      </Box>
+      <LoadingProgress value={loadingProgressMath(loadingProgress, maxItems)}></LoadingProgress>
     );
   };
 
@@ -108,21 +104,26 @@ function NewsList() {
     <Container>
       <Grid container justify="flex-start">
         <Box className={newsBoxClasses.boxListStyle} p={2} width={1}>
+
           <ButtonGroup variant="contained" size="small">
-            {[15, 30, 45].map((value, id) => {
-              return (
-                <Button
-                  color={value === maxItems ? "primary" : "secondary"}
-                  key={id}
-                  onClick={() => setMaxItems(value)}
-                >
-                  {value}
-                </Button>
-              );
-            })}
+            {
+              [15, 30, 45].map((value, id) => {
+                return (
+                  <Button
+                    color={value === maxItems ? "primary" : "secondary"}
+                    key={id}
+                    onClick={() => setMaxItems(value)}
+                  >
+                    {value}
+                  </Button>
+                );
+              })
+            }
           </ButtonGroup>
           
-          {ItemList()}
+          {
+            ListToggle()
+          }
           
         </Box>
       </Grid>
