@@ -9,8 +9,6 @@ import {
   Box,
   IconButton,
   Grid,
-  ButtonGroup,
-  Button,
 } from "@material-ui/core";
 import {
   makeStyles,
@@ -35,29 +33,14 @@ function MainLayout(props) {
   // const {  } = useRouteMatch();
   const classes = useStyles();
   const [sidebar, setSidebar] = useState(false);
-  const [contentType, setContentType] = useState("news");
-
-  function newsSubContent(params) {
-    if (contentType === "news") {
-      return (
-        <Grid xs={4}>
-          <ButtonGroup>
-            <Button>News</Button>
-            <Button>Ask</Button>
-            <Button>Show</Button>
-            <Button>Jobs</Button>
-          </ButtonGroup>
-        </Grid>
-      );
-    }
-  }
+  // const [contentType, setContentType] = useState("news");
 
   return (
     <Box>
       <Sidebar open={sidebar} onClose={() => setSidebar(!sidebar)} />
       <AppBar position="static">
         <Toolbar>
-          <Grid xs={8}>
+          <Grid item xs={8}>
             <Box display="inline-flex" alignItems="center">
               <IconButton
                 edge="start"
@@ -76,7 +59,9 @@ function MainLayout(props) {
         </Toolbar>
       </AppBar>
 
-      {props.children}
+      {
+        props.children
+      }
 
     </Box>
   );

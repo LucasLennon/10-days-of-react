@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import {
-//   Link,
-// } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import API from '../services'
 
@@ -10,13 +8,12 @@ import {
   Container, 
   Box,
   List,
-  ButtonGroup,
-  Button,
 } from "@material-ui/core"
 
 import NewsLayout from "../layout/NewsLayout";
 import NewsPreview from "../component/NewsPreview";
 import LoadingProgress from "../component/LoadingProgress";
+import QuantityButtonGroup from "../component/QuantityButtonGroup";
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -33,7 +30,32 @@ function loadingProgressMath(value, itemCount) {
   return value / itemCount * 100
 }
 
-function NewsList() {
+function listType(value) {
+  var response;
+  switch (value) {
+    case "/tops":
+      response = "topstories.json";
+      break;
+    case "/news":
+      response = "newstories.json";
+      break;
+    case "/asks":
+      response = "askstories.json";
+      break;
+    case "/show":
+      response = "showstories.json";
+      break;
+    case "/jobs":
+      response = "jobstories.json";
+      break;
+    default:
+      response = "topstories.json";
+      break;
+  }
+  return response;
+}
+
+function NewsList(props) {
   const newsBoxClasses = NewsBoxStyle();
   const [loadingContent, setLoading] = useState(true);
   const [maxItems, setMaxItems] = useState(15)
@@ -41,18 +63,21 @@ function NewsList() {
   const [storiesIDS, setStoriesIDS] = useState([])
   useEffect(() => {
     async function AllItems() {
-      const responseAll = await API.get("topstories.json");
+      const responseAll = await API.get(listType(props.location.pathname));
+      if (responseAll.length < maxItems) {
+        setMaxItems(responseAll.length);
+      }
       const slicedItems = responseAll.slice(0, maxItems);
-      setStoriesIDS(slicedItems)
+      setStoriesIDS(slicedItems);
     }
-    AllItems()
+    AllItems();
     return () => {
       setLoading(true);
       setLoadingProgress(0);
       setNewsList([]);
       setStoriesIDS([]);
     };
-  }, [maxItems])
+  }, [maxItems, props.location.pathname]);
 
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [newsList, setNewsList] = useState([])
@@ -71,11 +96,13 @@ function NewsList() {
   }, [storiesIDS])
 
   useEffect(() => {
-    if (loadingProgressMath(loadingProgress, maxItems) >= 95) {
+    if (
+      loadingProgressMath(loadingProgress, maxItems) >= 95
+    ) {
       setLoading(false);
       setLoadingProgress(0);
     }
-  }, [loadingProgress, maxItems])
+  }, [loadingProgress, maxItems]);
 
   const ListToggle = () => {
     if (loadingContent === false) {
@@ -93,24 +120,16 @@ function NewsList() {
   };
 
   return (
-    <NewsLayout pageName="News">
-      
+    <NewsLayout pageName="News" location={props.location}>
       <Container>
         <Grid container justify="flex-start">
           <Box className={newsBoxClasses.boxListStyle} p={2} width={1}>
-            <ButtonGroup variant="contained" size="small">
-              {[15, 30, 45].map((value, id) => {
-                return (
-                  <Button
-                    color={value === maxItems ? "primary" : "secondary"}
-                    key={id}
-                    onClick={() => setMaxItems(value)}
-                  >
-                    {value}
-                  </Button>
-                );
-              })}
-            </ButtonGroup>
+            <Box display="flex" justifyContent="flex-end">
+              <QuantityButtonGroup
+                onClick={value => setMaxItems(value)}
+                maxItems={maxItems}
+              />
+            </Box>
 
             {ListToggle()}
           </Box>

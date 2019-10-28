@@ -37,7 +37,7 @@ function BaseSidebar(props) {
     },
     {
       name: "Login",
-      path: "/Login"
+      path: "/login"
     },
     // {
     //   name: "Register",

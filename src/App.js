@@ -1,7 +1,4 @@
-import React, {
-  // useEffect,
-  Fragment
-} from "react";
+import React from "react";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -28,25 +25,21 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  // const {  } = useRouteMatch();
   return (
     <Router>
       <ThemeProvider theme={theme}>
         <Box>
           <Switch>
             <Route
-              exact
-              path="/"
+              path="/login"
               render={() => {
-                // setPageName("News");
-                return <NewsList />;
+                return <Login />;
               }}
             />
             <Route
-              path="/Login"
-              render={() => {
-                // setPageName("Login");
-                return <Login />;
+              path={["/", "/tops", "/news", "/ask", "/show", "jobs"]}
+              render={({location}) => {
+                return <NewsList location={location} />;
               }}
             />
             {/* <Route
