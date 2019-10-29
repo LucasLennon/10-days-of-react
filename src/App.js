@@ -2,13 +2,8 @@ import React from "react";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import {
-  Box,
-} from "@material-ui/core";
-import {
-  createMuiTheme,
-  ThemeProvider
-} from "@material-ui/core/styles";
+import { Box } from "@material-ui/core";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import NewsList from "./core/page/NewsList";
 import Login from "./core/page/Login";
@@ -16,10 +11,16 @@ import Login from "./core/page/Login";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#ff6600"
+      dark: "#b24700",
+      main: "#ff6600",
+      light: "#ff8433",
+      contrastText: "#ffffff"
     },
     secondary: {
-      main: "#f6f6ef"
+      main: "#f6f6ef",
+      light: "#f7f7f2",
+      dark: "#acaca7",
+      contrastText: "#000000"
     }
   }
 });
@@ -38,7 +39,7 @@ function App() {
             />
             <Route
               path={["/", "/tops", "/news", "/ask", "/show", "jobs"]}
-              render={({location}) => {
+              render={({ location }) => {
                 return <NewsList location={location} />;
               }}
             />

@@ -31,19 +31,30 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const ButtonStyle = makeStyles(theme => ({
+  active: {
+    color: theme.palette.primary.contrastText,
+    borderColor: theme.palette.primary.contrastText
+  },
+  inactive: {
+    color: theme.palette.secondary.contrastText,
+    borderColor: theme.palette.secondary.contrastText
+  }
+}));
+
 function NewsLayout(props) {
-  // const {  } = useRouteMatch();
+  const contentTypeButtonStyle = ButtonStyle();
   const classes = useStyles();
   const [sidebar, setSidebar] = useState(false);
 
   const buttonListTypes = [
     {
-     name: "Tops",
-     href: "/tops"
-    },
-    {
      name: "News",
      href: "/news"
+    },
+    {
+     name: "Tops",
+     href: "/tops"
     },
     {
      name: "Ask",
@@ -58,7 +69,7 @@ function NewsLayout(props) {
      href: "/jobs"
     },
   ]
-  
+   
   return (
     <Box>
       <Sidebar open={sidebar} onClose={() => setSidebar(!sidebar)} />
@@ -83,27 +94,22 @@ function NewsLayout(props) {
           <Grid item xs={4}>
             <Box display="flex" justifyContent="flex-end">
               <ButtonGroup>
-                {
-                  buttonListTypes.map((value,key) => {
-                    return (
-                      <Button
-                        color={
-                          props.location.pathname === value.href
-                            ? "primary"
-                            : "secondary"
-                        }
-                        href={value.href}
-                      >
-                        {value.name}
-                      </Button>
-                    );
-                  })
-                }
-                {/* <Button href={"/tops"}>Tops</Button>
-                <Button href={"/news"}>News</Button>
-                <Button href={"/ask"}>Ask</Button>
-                <Button href={"/show"}>Show</Button>
-                <Button href={"/jobs"}>Jobs</Button> */}
+                {buttonListTypes.map((value, key) => {
+                  return (
+                    <Button
+                      disabled={props.loading}
+                      key={key}
+                      className={
+                        props.location.pathname === value.href
+                          ? contentTypeButtonStyle.active
+                          : contentTypeButtonStyle.inactive
+                      }
+                      href={value.href}
+                    >
+                      {value.name}
+                    </Button>
+                  );
+                })}
               </ButtonGroup>
             </Box>
           </Grid>
@@ -111,6 +117,7 @@ function NewsLayout(props) {
       </AppBar>
 
       {props.children}
+
     </Box>
   );
 }
