@@ -6,10 +6,12 @@ import useLoading from "../hooks/useLoading";
 
 import { Grid, Container, Box, List } from "@material-ui/core";
 
-import NewsLayout from "../layout/NewsLayout";
+import NewsLayout from "../../../core/layout/NewsLayout";
+import LoadingProgress from "../../../core/component/LoadingProgress";
+import QuantityButtonGroup from "../../../core/component/QuantityButtonGroup";
+
 import NewsPreview from "../component/NewsPreview";
-import LoadingProgress from "../component/LoadingProgress";
-import QuantityButtonGroup from "../component/QuantityButtonGroup";
+import API from "../services";
 
 import { makeStyles } from "@material-ui/core/styles";
 
