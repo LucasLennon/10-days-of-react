@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import API from "../services";
+
+import useGetIDS from "../hooks/useGetIDS";
+import useGetItems from "../hooks/useGetItems";
+import useLoading from "../hooks/useLoading";
 
 import { Grid, Container, Box, List } from "@material-ui/core";
 
@@ -21,89 +24,40 @@ function loadingProgressMath(value, itemCount) {
   return (value / itemCount) * 100;
 }
 
-function listType(value) {
-  var response;
-  switch (value) {
-    case "/tops":
-      response = "topstories.json";
-      break;
-    case "/news":
-      response = "newstories.json";
-      break;
-    case "/asks":
-      response = "askstories.json";
-      break;
-    case "/show":
-      response = "showstories.json";
-      break;
-    case "/jobs":
-      response = "jobstories.json";
-      break;
-    default:
-      response = "topstories.json";
-      break;
-  }
-  return response;
-}
-
 function NewsPage(props) {
   const newsBoxClasses = NewsBoxStyle();
-
-  const [loadingContent, setLoading] = useState(true);
   const [maxItems, setMaxItems] = useState(15);
+  const [storiesIDS] = useGetIDS(
+    maxItems,
+    props.location.pathname,
+    setMaxItems
+  );
 
-  const [storiesIDS, setStoriesIDS] = useState([]);
+  const [itemsList] = useGetItems(storiesIDS, maxItems);
+
+  const [
+    { loadingState },
+    { loadingStateProgress, setLoadingProgress }
+  ] = useLoading({
+    state: true,
+    progress: 0
+  });
   useEffect(() => {
-    async function AllItems() {
-      const responseAll = await API.get(listType(props.location.pathname));
-      if (responseAll.length < maxItems) {
-        setMaxItems(responseAll.length);
+    function update() {
+      if (loadingProgressMath(loadingStateProgress, maxItems) >= 100) {
+        setLoadingProgress(c => (c = 0));
+      } else {
+        setLoadingProgress(c => (c += 1));
       }
-      const slicedItems = responseAll.slice(0, maxItems);
-      setStoriesIDS(slicedItems);
     }
-    AllItems();
-    return () => {
-      setLoading(true);
-      setLoadingProgress(0);
-      setNewsList([]);
-      setStoriesIDS([]);
-    };
-  }, [maxItems, props.location.pathname]);
-
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  const [newsList, setNewsList] = useState([]);
-  useEffect(() => {
-    async function getItemsInformation() {
-      storiesIDS.forEach(async (value, index) => {
-        const item = await API.get("item/" + value + ".json");
-        setLoadingProgress(c => c + 1);
-        if (!!item) {
-          setNewsList(n => [...n, item]);
-        }
-      });
-    }
-
-    if (storiesIDS.length > 0) {
-      getItemsInformation();
-    }
-  }, [storiesIDS]);
-
-  useEffect(() => {
-    function hideLoading() {
-      setLoading(false);
-      setLoadingProgress(0);
-    }
-    if (loadingProgressMath(loadingProgress, maxItems) >= 95) {
-      hideLoading();
-    }
-  }, [loadingProgress, maxItems]);
+    update();
+  }, [itemsList.length]);
 
   const toggleList = () => {
-    if (loadingContent === false) {
+    if (loadingState === false) {
       return (
         <List>
-          {newsList.map((item, key) => {
+          {itemsList.map((item, key) => {
             return <NewsPreview info={item} id={key + 1} key={key + 1} />;
           })}
         </List>
@@ -111,13 +65,13 @@ function NewsPage(props) {
     }
     return (
       <LoadingProgress
-        value={loadingProgressMath(loadingProgress, maxItems)}
+        value={loadingProgressMath(loadingStateProgress, maxItems)}
       ></LoadingProgress>
     );
   };
 
   function toggleQuantityButtons() {
-    if (storiesIDS.length > 14 && loadingContent === false) {
+    if (storiesIDS.length > 14 && loadingState === false) {
       return (
         <QuantityButtonGroup
           onClick={value => setMaxItems(value)}
@@ -132,7 +86,7 @@ function NewsPage(props) {
     <NewsLayout
       pageName="News"
       location={props.location}
-      loading={loadingContent}
+      loading={loadingState}
     >
       <Container>
         <Grid container justify="flex-start">
