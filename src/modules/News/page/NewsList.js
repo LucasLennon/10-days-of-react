@@ -11,7 +11,6 @@ import LoadingProgress from "../../../core/component/LoadingProgress";
 import QuantityButtonGroup from "../../../core/component/QuantityButtonGroup";
 
 import NewsPreview from "../component/NewsPreview";
-import API from "../services";
 
 import { makeStyles } from "@material-ui/core/styles";
 
