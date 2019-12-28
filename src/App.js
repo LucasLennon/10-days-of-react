@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Box } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
-import NewsList from "./core/page/NewsList";
 import Login from "./core/page/Login";
+import NewsList from "./modules/News/page/NewsList";
 
 const theme = createMuiTheme({
   palette: {

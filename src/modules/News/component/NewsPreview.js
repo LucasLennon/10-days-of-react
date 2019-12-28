@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   Box,
@@ -6,22 +6,30 @@ import {
   ListItem,
   Typography,
   ButtonGroup,
-  Button,
-} from "@material-ui/core"
+  Button
+} from "@material-ui/core";
 
 function NewsPreview(props) {
-
+  function mainLink(value) {
+    if (!!value) {
+      const search = value.match(/(?![www]+\.)([\w]+)\.([a-z]{3})/g);
+      if (!!search) {
+        return search[0];
+      }
+    }
+    return "";
+  }
   function pointsLabel() {
     if (props.info.score > 1) {
-      return 'points'
+      return "points";
     }
-    return 'point'
+    return "point";
   }
   function commentsLabel() {
     if (props.info.descendants > 1) {
-      return 'comments'
+      return "comments";
     }
-    return 'comment'
+    return "comment";
   }
 
   if (!props.info.dead) {
@@ -29,22 +37,28 @@ function NewsPreview(props) {
       <ListItem>
         <Box display="flex" flexWrap="wrap" width={1}>
           <Box display="flex" width={1}>
-            <Link href={
-              (props.info.url) ? props.info.url : `/news/${props.info.id}`
-            } variant="body1">
-              {props.id}.
-              {props.info.title}
+            <Link
+              href={props.info.url ? props.info.url : `/news/${props.info.id}`}
+              variant="body1"
+            >
+              {props.id}.{props.info.title}
               <Box display="inline" mx={1}>
                 <Typography variant="caption" mx={1}>
-                  ({props.info.url})
+                  ({mainLink(props.info.url)})
                 </Typography>
               </Box>
             </Link>
           </Box>
           <Box display="inline">
-            <ButtonGroup variant="contained" size="small" aria-label="small contained button group">
+            <ButtonGroup
+              variant="contained"
+              size="small"
+              aria-label="small contained button group"
+            >
               <Button>
-                {new Date(props.info.time).toLocaleString('en-US', { timeStyle: "short" })}
+                {new Date(props.info.time).toLocaleString("en-US", {
+                  timeStyle: "short"
+                })}
               </Button>
               <Button onClick={() => props.hideItem(props.info.id)}>
                 hide
@@ -56,15 +70,17 @@ function NewsPreview(props) {
 
             <Box display="inline" mx={1}>
               <Typography variant="caption">
-                {props.info.score} {pointsLabel()} from <Link> {props.info.by} </Link>
+                {props.info.score} {pointsLabel()} from{" "}
+                <Link> {props.info.by} </Link>
               </Typography>
             </Box>
-
           </Box>
         </Box>
       </ListItem>
     );
   }
+
+  return "";
 }
 
 export default NewsPreview;
